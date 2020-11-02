@@ -1,21 +1,24 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
-import {Alert, StatusBar, View} from 'react-native';
+import {StatusBar, View} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import ImgPicker from 'react-native-image-picker';
+import Icon from 'react-native-vector-icons/Feather';
+import Icons from 'react-native-vector-icons/Ionicons';
 
 import {
   Container,
   Content,
+  ButtonBack,
   ButtonTakePhoto,
-  TextButtonTakePhoto,
+  ButtonGetGallery,
   ToggleModal,
-  ContentModal,
   ButtonClose,
-  TextButtonClose,
+  ButtonSave,
+  ButtonSaveText,
   TakedImage,
-  ChangeContainer,
   ChangeButton,
-  ChangeButtonText,
+  FlashButton,
 } from './styles';
 
 interface Options {
@@ -26,7 +29,10 @@ interface Options {
 }
 
 const Camera: React.FC = () => {
+  const {navigate} = useNavigation();
+
   const [type, setType] = useState(RNCamera.Constants.Type.back);
+  const [typeFlash, setTypeFlash] = useState(RNCamera.Constants.FlashMode.off);
   const [open, setOpen] = useState(false);
   const [capturedPhoto, setCaputuredPhoto] = useState<string | null>(null);
 
@@ -47,7 +53,15 @@ const Camera: React.FC = () => {
         ? RNCamera.Constants.Type.front
         : RNCamera.Constants.Type.back,
     );
-  }, [setType, type]);
+  }, [type]);
+
+  const handleChangeFlash = useCallback(() => {
+    setTypeFlash(
+      typeFlash === RNCamera.Constants.FlashMode.off
+        ? RNCamera.Constants.FlashMode.on
+        : RNCamera.Constants.FlashMode.off,
+    );
+  }, [typeFlash]);
 
   const OpenAlbum = useCallback(() => {
     const options: Options = {
@@ -70,6 +84,10 @@ const Camera: React.FC = () => {
     });
   }, []);
 
+  const handleToDashboard = useCallback(() => {
+    navigate('Dashboard');
+  }, [navigate]);
+
   return (
     <Container>
       <StatusBar hidden={true} />
@@ -77,7 +95,7 @@ const Camera: React.FC = () => {
       <RNCamera
         style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}
         type={type}
-        flashMode={RNCamera.Constants.FlashMode.auto}
+        flashMode={typeFlash}
         androidCameraPermissionOptions={{
           title: 'Permissão para user a camera',
           message: 'Nós precisamos usar a sua camera',
@@ -91,32 +109,45 @@ const Camera: React.FC = () => {
 
           return (
             <Content>
-              <ButtonTakePhoto onPress={() => TakePicture(camera)}>
-                <TextButtonTakePhoto>Tirar foto</TextButtonTakePhoto>
-              </ButtonTakePhoto>
-
-              <ButtonTakePhoto onPress={OpenAlbum}>
-                <TextButtonTakePhoto>Album</TextButtonTakePhoto>
-              </ButtonTakePhoto>
+              <ButtonTakePhoto onPress={() => TakePicture(camera)} />
             </Content>
           );
         }}
       </RNCamera>
 
-      <ChangeContainer>
-        <ChangeButton onPress={toggleCam}>
-          <ChangeButtonText>Trocar</ChangeButtonText>
-        </ChangeButton>
-      </ChangeContainer>
+      <ButtonBack onPress={handleToDashboard}>
+        <Icon name="arrow-left" size={34} color="#ECEFF1" />
+      </ButtonBack>
+
+      <FlashButton onPress={handleChangeFlash}>
+        {typeFlash === RNCamera.Constants.FlashMode.off && (
+          <Icons name="md-flash-off" size={34} color="#ECEFF1" />
+        )}
+        {typeFlash === RNCamera.Constants.FlashMode.on && (
+          <Icons name="md-flash" size={34} color="#ECEFF1" />
+        )}
+      </FlashButton>
+
+      <ButtonGetGallery onPress={OpenAlbum}>
+        <Icon name="image" size={34} color="#ECEFF1" />
+      </ButtonGetGallery>
+
+      <ChangeButton onPress={toggleCam}>
+        <Icons name="camera-reverse" size={34} color="#ECEFF1" />
+      </ChangeButton>
 
       {capturedPhoto && (
         <ToggleModal animationType="slide" transparent={false} visible={open}>
-          <ContentModal>
-            <ButtonClose onPress={() => setOpen(false)}>
-              <TextButtonClose>Fechar</TextButtonClose>
-            </ButtonClose>
-            <TakedImage source={{uri: capturedPhoto}} />
-          </ContentModal>
+          <TakedImage source={{uri: capturedPhoto}} />
+
+          <ButtonClose onPress={() => setOpen(false)}>
+            <Icon name="x" size={34} color="#ECEFF1" />
+          </ButtonClose>
+
+          <ButtonSave onPress={() => {}}>
+            <ButtonSaveText>Save</ButtonSaveText>
+            <Icon name="arrow-right" size={24} color="#263238" />
+          </ButtonSave>
         </ToggleModal>
       )}
     </Container>

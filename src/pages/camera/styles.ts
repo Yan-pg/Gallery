@@ -1,3 +1,4 @@
+import {RectButton} from 'react-native-gesture-handler';
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
@@ -7,36 +8,47 @@ export const Container = styled.View`
 
 export const Content = styled.View`
   margin-bottom: 35px;
-  flex-direction: row;
-  align-items: flex-end;
-  justify-content: space-between;
 `;
 
 export const ButtonTakePhoto = styled.TouchableOpacity`
-  background-color: #fff;
-  width: 100px;
+  width: 50px;
   height: 50px;
-  border-radius: 5px;
+  background: #fff;
+  border-radius: 25px;
   padding: 15px;
   align-self: center;
   margin: 20px;
 `;
 
-export const TextButtonTakePhoto = styled.Text``;
-
-export const ChangeContainer = styled.View`
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 10px;
-  height: 40px;
+export const ButtonGetGallery = styled.TouchableOpacity`
   position: absolute;
-  right: 25px;
-  top: 60px;
+  bottom: 60px;
+  right: 10px;
+  margin-right: 10px;
 `;
 
-export const ChangeButton = styled.TouchableOpacity``;
+export const TextButtonTakePhoto = styled.Text``;
 
-export const ChangeButtonText = styled.Text``;
+export const ChangeButton = styled.TouchableOpacity`
+  position: absolute;
+  bottom: 60px;
+  left: 10px;
+  margin-left: 10px;
+`;
+
+export const ButtonBack = styled.TouchableOpacity`
+  position: absolute;
+  top: 30px;
+  left: 10px;
+  margin-left: 10px;
+`;
+
+export const FlashButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  margin-right: 10px;
+`;
 
 export const ToggleModal = styled.Modal``;
 
@@ -48,13 +60,30 @@ export const ContentModal = styled.View`
 `;
 
 export const ButtonClose = styled.TouchableOpacity`
-  margin: 10px;
+  position: absolute;
+  top: 15px;
+  left: 10px;
 `;
 
-export const TextButtonClose = styled.Text``;
-
 export const TakedImage = styled.Image`
-  width: 350px;
-  height: 450px;
-  border-radius: 15px;
+  flex: 1;
+  width: auto;
+`;
+
+export const ButtonSave = styled(RectButton)`
+  flex-direction: row;
+  width: 90px;
+  height: 40px;
+  background: #eceff1;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 60px;
+  right: 10px;
+  align-items: center;
+`;
+
+export const ButtonSaveText = styled.Text`
+  color: #263238;
+  font-family: 'Roboto-Bold';
+  padding-left: 15px;
 `;

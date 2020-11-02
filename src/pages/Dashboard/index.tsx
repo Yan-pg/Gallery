@@ -1,20 +1,54 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {ScrollView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Feather';
 
 import {
   Container,
-  Header,
+  ContainerIcon,
+  ButtonIconCamera,
+  ButtonIconNotification,
+  Notification,
+  AvatarImage,
   HeaderText,
+  TextBio,
+  ContentInfo,
+  ContentFollowers,
+  Followers,
+  ViewDisplay,
+  Quantity,
+  ContainerInfos,
+  ButtonContent,
+  ButtonFollow,
+  ButtoFollowText,
+  ButtonUnFollow,
+  ButtoUnFollowText,
   ContainerPhoto,
   ContentImg,
   Img,
-  ButtonCan,
-  ButtonText,
+  ButtonContentUnfollow,
+  HeaderMain,
 } from './styles';
 
 const Dashboard: React.FC = () => {
+  const [quantity, setQuantity] = useState(500);
+  const [changeButtonToUnfollow, setChangeButtonToUnfollow] = useState(false);
+
   const {navigate} = useNavigation();
+
+  const handleQuantityFollow = useCallback(() => {
+    const more = quantity + 1;
+
+    setChangeButtonToUnfollow(true);
+    setQuantity(more);
+  }, [quantity]);
+
+  const handleQuantityUnfollow = useCallback(() => {
+    const less = quantity - 1;
+
+    setChangeButtonToUnfollow(false);
+    setQuantity(less);
+  }, [quantity]);
 
   const goToCamera = useCallback(() => {
     navigate('Camera');
@@ -23,12 +57,56 @@ const Dashboard: React.FC = () => {
   return (
     <ScrollView>
       <Container>
-        <Header />
+        <ContainerIcon>
+          <ButtonIconCamera onPress={goToCamera}>
+            <Icon name="camera" color="#212121" size={26} />
+          </ButtonIconCamera>
+
+          {changeButtonToUnfollow && <Notification />}
+
+          <ButtonIconNotification>
+            <Icon name="bell" size={24} color="#212121" />
+          </ButtonIconNotification>
+        </ContainerIcon>
         <HeaderMain>
-          <HeaderText>Hi, Yan César</HeaderText>
-          <ButtonCan onPress={goToCamera}>
-            <ButtonText>Camera</ButtonText>
-          </ButtonCan>
+          <HeaderText>Yan César</HeaderText>
+
+          <ContainerInfos>
+            <AvatarImage
+              source={{
+                uri:
+                  'https://avatars1.githubusercontent.com/u/65233281?s=460&u=a1ca2db09724eda3482163e5d27d89ebfec5f8fc&v=4',
+              }}
+            />
+            <ContentInfo>
+              <TextBio>Developer full stack</TextBio>
+
+              <ContentFollowers>
+                <ViewDisplay>
+                  <Followers>{quantity}</Followers>
+                  <Quantity>Followers</Quantity>
+                </ViewDisplay>
+
+                <ViewDisplay>
+                  <Followers>15k</Followers>
+                  <Quantity>Following</Quantity>
+                </ViewDisplay>
+              </ContentFollowers>
+              <ButtonContent>
+                <ButtonFollow onPress={handleQuantityFollow}>
+                  <ButtoFollowText>Follow</ButtoFollowText>
+                </ButtonFollow>
+              </ButtonContent>
+
+              {changeButtonToUnfollow && (
+                <ButtonContentUnfollow>
+                  <ButtonUnFollow onPress={handleQuantityUnfollow}>
+                    <ButtoUnFollowText>Unfollow</ButtoUnFollowText>
+                  </ButtonUnFollow>
+                </ButtonContentUnfollow>
+              )}
+            </ContentInfo>
+          </ContainerInfos>
         </HeaderMain>
         <ContainerPhoto>
           <ContentImg>

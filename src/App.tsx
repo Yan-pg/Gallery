@@ -5,8 +5,8 @@ import AppRoutes from './routes/app.routes';
 const App: React.FC = () => {
   return (
     <>
-      <StatusBar backgroundColor="#FEF4E1" barStyle="dark-content" />
-      <View style={{flex: 1, backgroundColor: '#FEF4E1'}}>
+      <StatusBar backgroundColor="#f5f5f5" barStyle="dark-content" />
+      <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
         <AppRoutes />
       </View>
     </>
